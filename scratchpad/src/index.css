@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@200..900&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-primary: #5474de;
+  --color-primary-dark: #15307f;
+}
+
+body {
+  min-height: 100dvh;
+  font-family:
+    'Chiron GoRound TC',
+    system-ui,
+    -apple-system,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+#root {
+  padding: 1rem 0 2rem;
+}
+
+.app {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.hint {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+  color: #5c5c5c;
+}
+
+.task-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  position: sticky;
+  top: 20px;
+}
+
+.task-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid #c8ccd4;
+  border-radius: 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.task-input:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn {
+  padding: 0rem 1rem;
+  border: none;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  color: #fff;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+.btn:active {
+  filter: brightness(0.95);
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-item {
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e4ea;
+  word-break: break-word;
+}
