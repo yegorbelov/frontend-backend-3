@@ -1,5 +1,25 @@
-const CACHE_NAME = 'app-shell-v6';
-const DYNAMIC_CACHE_NAME = 'dynamic-content-v6';
+const CACHE_NAME = 'app-shell-v7';
+const DYNAMIC_CACHE_NAME = 'dynamic-content-v7';
+const SW_META_CACHE = 'scratchpad-sw-meta-v1';
+const SW_API_BASE_KEY = () =>
+  new URL('/__sw_meta__/api-base', self.location.origin).href;
+
+async function getSnoozeOrigin() {
+  try {
+    const cache = await caches.open(SW_META_CACHE);
+    const res = await cache.match(SW_API_BASE_KEY());
+    if (res) {
+      const data = await res.json();
+      const base = data && data.base;
+      if (typeof base === 'string' && /^https?:\/\//i.test(base)) {
+        return new URL(base).origin;
+      }
+    }
+  } catch (e) {
+    /* ignore */
+  }
+  return self.location.origin;
+}
 
 const PRECACHE_URLS = [
   '/',
@@ -35,7 +55,12 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((k) => k !== CACHE_NAME && k !== DYNAMIC_CACHE_NAME)
+            .filter(
+              (k) =>
+                k !== CACHE_NAME &&
+                k !== DYNAMIC_CACHE_NAME &&
+                k !== SW_META_CACHE,
+            )
             .map((k) => caches.delete(k)),
         ),
       )
@@ -77,10 +102,15 @@ self.addEventListener('notificationclick', (event) => {
   const action = event.action;
   if (action === 'snooze') {
     const reminderId = notification.data?.reminderId;
-    const url = new URL('/snooze', self.location.origin);
-    if (reminderId != null) url.searchParams.set('reminderId', String(reminderId));
     event.waitUntil(
-      fetch(url.toString(), { method: 'POST' })
+      getSnoozeOrigin()
+        .then((origin) => {
+          const url = new URL('/snooze', origin);
+          if (reminderId != null) {
+            url.searchParams.set('reminderId', String(reminderId));
+          }
+          return fetch(url.toString(), { method: 'POST' });
+        })
         .then(() => notification.close())
         .catch((err) => console.error('Snooze failed:', err)),
     );

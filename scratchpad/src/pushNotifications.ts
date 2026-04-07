@@ -1,4 +1,5 @@
 import { getServerBase } from './serverBase';
+import { persistApiBaseForServiceWorker } from './swApiBaseCache';
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -75,6 +76,7 @@ export async function subscribeToPush(): Promise<PushResult> {
       };
     }
     console.log('Push subscription sent to server');
+    await persistApiBaseForServiceWorker();
     return { ok: true };
   } catch (err) {
     if (subscription) {
