@@ -45,6 +45,75 @@ h1 {
   margin: 0 0 0.5rem;
 }
 
+.app-shell__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.app-shell__header-row h1 {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.push-header-control {
+  flex-shrink: 0;
+}
+
+.btn.btn--header-push {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  min-width: 2.35rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+}
+
+.btn.btn--header-push:hover {
+  filter: none;
+  opacity: 0.72;
+}
+
+.btn.btn--header-push:active {
+  filter: none;
+  opacity: 0.55;
+}
+
+.btn.btn--header-push:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.push-icon {
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.push-icon--mono {
+  width: 18px;
+  height: 18px;
+  opacity: 0.88;
+}
+
+.push-icon--loading {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0);
+  opacity: 0.4;
+}
+
+.btn.btn--header-push:disabled {
+  opacity: 0.55;
+}
+
 .hint {
   margin: 0 0 1.25rem;
   font-size: 0.9rem;
@@ -105,8 +174,160 @@ h1 {
 }
 
 .task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.65rem 0.85rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid #e2e4ea;
   word-break: break-word;
+}
+
+.task-item__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn--task-delete {
+  flex-shrink: 0;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #c5221f;
+  background: #fdecea;
+  border: 1px solid #f5c6c2;
+  border-radius: 10px;
+}
+
+.btn--task-delete:hover {
+  filter: brightness(0.97);
+}
+
+.btn--task-delete:active {
+  filter: brightness(0.92);
+}
+
+.no-break {
+  white-space: nowrap;
+}
+
+.app-shell__header {
+  margin-bottom: 1rem;
+}
+
+.shell-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.shell-tab {
+  flex: 1 1 8rem;
+  padding: 0.1rem 0.75rem;
+  border: 1px solid #c8ccd4;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  background: #f0f2f7;
+  color: #1a1a1a;
+}
+
+.shell-tab:hover {
+  filter: brightness(1.02);
+}
+
+.shell-tab--active {
+  border-color: var(--color-primary);
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  color: #fff;
+}
+
+.app-shell__main {
+  margin-top: 2rem;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.section-title--spaced {
+  margin-top: 2rem;
+}
+
+.section-title.muted {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #5c5c5c;
+}
+
+.about-content p {
+  margin: 0 0 0.75rem;
+}
+
+.about-content code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+  background: #eef1f6;
+}
+
+.text-error {
+  text-align: center;
+  color: #c62828;
+  margin: 1rem 0;
+}
+
+.task-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: min(90vw, 22rem);
+  padding: 0.5rem 1.15rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 16px;
+  color: #fff;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 60% 20%,
+      color-mix(in srgb, var(--color-primary) 90%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 20% 80%,
+      color-mix(in srgb, var(--color-primary-dark) 75%, transparent),
+      transparent 95%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 60% 65%,
+      color-mix(in srgb, var(--color-primary) 68%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 65% 40% at 50% 60%,
+      color-mix(in srgb, var(--color-primary-dark) 80%, transparent),
+      transparent 98%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 86%, #fff) 0%,
+      color-mix(in srgb, var(--color-primary-dark) 50%, #fff) 100%
+    );
+
+  text-align: center;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
 }

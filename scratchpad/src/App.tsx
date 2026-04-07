@@ -1,63 +1,58 @@
-import { useState, useEffect, type FormEvent } from 'react';
+import { useState } from 'react';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { PushNotificationsButton } from './PushNotificationsButton';
+import { TaskAddedToast } from './TaskAddedToast';
 
-const STORAGE_KEY = 'tasks';
-
-function readTasks(): string[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed)
-      ? parsed.filter((x): x is string => typeof x === 'string')
-      : [];
-  } catch {
-    return [];
-  }
-}
+type Page = 'home' | 'about';
 
 export default function App() {
-  const [tasks, setTasks] = useState<string[]>(readTasks);
-  const [input, setInput] = useState('');
+  const [page, setPage] = useState<Page>('home');
+  const [activeBtn, setActiveBtn] = useState<'home-btn' | 'about-btn'>(
+    'home-btn',
+  );
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  }, [tasks]);
+  function goHome(): void {
+    setActiveBtn('home-btn');
+    setPage('home');
+  }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text) return;
-    setTasks((prev) => [...prev, text]);
-    setInput('');
+  function goAbout(): void {
+    setActiveBtn('about-btn');
+    setPage('about');
   }
 
   return (
-    <div className='app'>
-      <h1>Scratchpad</h1>
-      <form className='task-form' onSubmit={handleSubmit}>
-        <input
-          className='task-input'
-          type='text'
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder='New task'
-          required
-          autoComplete='off'
-        />
-        <button className='btn' type='submit'>
-          Add Task
-        </button>
-      </form>
+    <div className='app app-shell'>
+      <TaskAddedToast />
+      <header className='app-shell__header'>
+        <div className='app-shell__header-row'>
+          <h1>Scratchpad</h1>
+          <PushNotificationsButton />
+        </div>
+        <nav className='shell-tabs' aria-label='Tabs'>
+          <button
+            id='home-btn'
+            type='button'
+            className={`shell-tab${activeBtn === 'home-btn' ? ' shell-tab--active' : ''}`}
+            onClick={goHome}
+          >
+            Home
+          </button>
+          <button
+            id='about-btn'
+            type='button'
+            className={`shell-tab${activeBtn === 'about-btn' ? ' shell-tab--active' : ''}`}
+            onClick={goAbout}
+          >
+            About
+          </button>
+        </nav>
+      </header>
 
-      <ul className='task-list'>
-        {tasks
-          .slice()
-          .reverse()
-          .map((task, i) => (
-            <li key={`${i}-${task.slice(0, 24)}`} className='task-item'>
-              {task}
-            </li>
-          ))}
-      </ul>
+      <main id='app-content' className='app-shell__main'>
+        {page === 'home' ? <HomePage /> : <AboutPage />}
+      </main>
     </div>
   );
 }

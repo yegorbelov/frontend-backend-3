@@ -6,7 +6,7 @@ import App from './App';
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     void navigator.serviceWorker
-      .register('/sw.js')
+      .register('/sw.js', { scope: '/' })
       .then((registration) => {
         console.log('ServiceWorker registered:', registration.scope);
       })
