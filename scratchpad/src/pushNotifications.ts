@@ -20,11 +20,21 @@ async function fetchVapidPublicKey(): Promise<string> {
   return data.publicKey;
 }
 
-export type PushResult =
-  | { ok: true }
-  | { ok: false; message: string };
+export type PushResult = { ok: true } | { ok: false; message: string };
 
-/** Ensures /sw.js is registered and active (Push requires a service worker). */
+export async function hasActivePushSubscription(): Promise<boolean> {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    return false;
+  }
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    return subscription != null;
+  } catch {
+    return false;
+  }
+}
+
 export async function ensurePushServiceWorker(): Promise<ServiceWorkerRegistration> {
   if (!('serviceWorker' in navigator)) {
     throw new Error('Service workers are not supported');

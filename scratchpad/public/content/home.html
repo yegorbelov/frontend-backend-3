@@ -4,11 +4,25 @@
       class="task-input"
       type="text"
       id="note-input"
-      placeholder="Enter task"
+      placeholder="Enter a task"
       required
       autocomplete="off"
     />
-    <button class="btn" type="submit">Add Task</button>
+    <input
+      type="datetime-local"
+      id="new-task-reminder"
+      class="visually-hidden"
+      tabindex="-1"
+      aria-hidden="true"
+    />
+    <button
+      type="button"
+      class="task-form__reminder-pill task-form__reminder-pill--muted"
+      id="new-task-reminder-trigger"
+    >
+      Add reminder
+    </button>
+    <button class="btn" type="submit">Add task</button>
   </form>
   <ul id="notes-list" class="task-list"></ul>
 </div>

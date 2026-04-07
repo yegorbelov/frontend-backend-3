@@ -1,25 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
-import { subscribeToPush, unsubscribeFromPush } from './pushNotifications';
-
-async function readPushActive(): Promise<boolean> {
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    return false;
-  }
-  try {
-    const reg = await navigator.serviceWorker.ready;
-    const sub = await reg.pushManager.getSubscription();
-    return !!sub;
-  } catch {
-    return false;
-  }
-}
+import {
+  subscribeToPush,
+  unsubscribeFromPush,
+  hasActivePushSubscription,
+} from './pushNotifications';
 
 export function PushNotificationsButton() {
   const [pushActive, setPushActive] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const syncFromBrowser = useCallback(() => {
-    void readPushActive().then(setPushActive);
+    void hasActivePushSubscription().then(setPushActive);
   }, []);
 
   useEffect(() => {

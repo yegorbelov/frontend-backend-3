@@ -1,6 +1,6 @@
 export const NOTES_STORAGE_KEY = 'notes';
 
-export type Note = { id: number; text: string };
+export type Note = { id: number; text: string; reminder?: number | null };
 
 function parseNotes(raw: string | null): Note[] {
   if (!raw) return [];
@@ -20,7 +20,13 @@ function parseNotes(raw: string | null): Note[] {
       if (typeof o.text !== 'string') continue;
       const id =
         typeof o.id === 'number' && Number.isFinite(o.id) ? o.id : i + 1;
-      out.push({ id, text: o.text });
+      let reminder: number | null | undefined;
+      if (typeof o.reminder === 'number' && Number.isFinite(o.reminder)) {
+        reminder = o.reminder;
+      } else if (o.reminder === null) {
+        reminder = null;
+      }
+      out.push({ id, text: o.text, reminder });
     }
     return out;
   } catch {

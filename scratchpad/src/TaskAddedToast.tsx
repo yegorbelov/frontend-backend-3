@@ -11,7 +11,7 @@ export function TaskAddedToast() {
       const text = task.text ?? '';
       setMessage(text);
       console.log('Task from another client:', task);
-      timer = setTimeout(() => setMessage(null), 300000);
+      timer = setTimeout(() => setMessage(null), 3000);
     };
     socket.on('taskAdded', onTaskAdded);
     return () => {

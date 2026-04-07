@@ -1,5 +1,5 @@
-const CACHE_NAME = 'app-shell-v5';
-const DYNAMIC_CACHE_NAME = 'dynamic-content-v5';
+const CACHE_NAME = 'app-shell-v6';
+const DYNAMIC_CACHE_NAME = 'dynamic-content-v6';
 
 const PRECACHE_URLS = [
   '/',
@@ -44,14 +44,15 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let data = { title: 'Notification', body: '' };
+  let data = { title: 'Notification', body: '', reminderId: null };
   if (event.data) {
     try {
-      data = event.data.json();
+      data = { reminderId: null, ...event.data.json() };
     } catch {
       data = {
         title: 'Notification',
         body: event.data.text() || '',
+        reminderId: null,
       };
     }
   }
@@ -59,10 +60,33 @@ self.addEventListener('push', (event) => {
     body: data.body,
     icon: '/icons/icon-128x128.png',
     badge: '/icons/icon-48x48.png',
+    data: { reminderId: data.reminderId },
   };
+  if (data.reminderId != null) {
+    options.actions = [
+      { action: 'snooze', title: 'Snooze for 5 minutes' },
+    ];
+  }
   event.waitUntil(
     self.registration.showNotification(data.title, options),
   );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  const notification = event.notification;
+  const action = event.action;
+  if (action === 'snooze') {
+    const reminderId = notification.data?.reminderId;
+    const url = new URL('/snooze', self.location.origin);
+    if (reminderId != null) url.searchParams.set('reminderId', String(reminderId));
+    event.waitUntil(
+      fetch(url.toString(), { method: 'POST' })
+        .then(() => notification.close())
+        .catch((err) => console.error('Snooze failed:', err)),
+    );
+  } else {
+    notification.close();
+  }
 });
 
 self.addEventListener('fetch', (event) => {
